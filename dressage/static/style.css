@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+.imagebox {
+    height:100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+
+.infobox {
+    float:right;
+    background: rgba(0, 0, 0, 0.5);
+    border: 3px solid black;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 0.5ex;
+}
+
+.starRatings {
+    font-size: 35px;
+}
+
+a {
+    color: inherit; /* blue colors for links too */
+    text-decoration: inherit; /* no underline */
+}

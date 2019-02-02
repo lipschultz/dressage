@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Dressage Slideshow</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <meta http-equiv="refresh" content="{{ content['refresh-rate'] }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
+    </head>
+    <body style="background-color: black;" onload="rating=0; showRating(); refreshSeconds = 7*60;">
+        <div class="imagebox" style="background-image: url({{ url_for('static', filename='images/' + content['source']) }});">
+            {% for message in get_flashed_messages() %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+
+            <div class="infobox">
+                <p id="refresh-display">
+                    Refresh in <span id="time-remaining">0:00</span>
+                    <a style="font-size:140%; padding-left:1ex; padding-right:1ex;" id="pause-countdown" href="#" onclick="pauseCountdown();return false;">⏸️</a>
+                    <a style="font-size:140%" id="reload" href="">🔄</a>
+                </p>
+                <!--<p>{{ content['source'].name }}</p>-->
+                <p style="text-align:center;">
+                    <span class="starRatings" onmouseleave="showRating();">
+                        <a id="rating-1" href="#" onmouseover="highlightStars(1);return false;" onclick="setRating(1);return false;">☆</a>
+                        <a id="rating-2" href="#" onmouseover="highlightStars(2);return false;" onclick="setRating(2);return false;">☆</a>
+                        <a id="rating-3" href="#" onmouseover="highlightStars(3);return false;" onclick="setRating(3);return false;">☆</a>
+                        <a id="rating-4" href="#" onmouseover="highlightStars(4);return false;" onclick="setRating(4);return false;">☆</a>
+                        <a id="rating-5" href="#" onmouseover="highlightStars(5);return false;" onclick="setRating(5);return false;">☆</a>
+                    </span>
+                </p>
+            </div>
+        </div>
+    </body>
+</html>
