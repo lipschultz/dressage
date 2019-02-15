@@ -5,8 +5,12 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
         <meta http-equiv="refresh" content="{{ content['refresh-rate'] }}">
         <script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script type=text/javascript>
+          SCRIPT_ROOT = {{ request.url_root|tojson|safe }};
+        </script>
     </head>
-    <body style="background-color: black;" onload="rating=0; showRating(); refreshSeconds = 7*60;">
+    <body style="background-color: black;" onload="rating={{ content['rating'] }}; showRating(); refreshSeconds = 7*60;">
         {% if content['type'] == 'img' %}
             <div class="imagebox" style="background-image: url({{ url_for('static', filename='images/' + content['source']) }});">
                 {% for message in get_flashed_messages() %}
@@ -22,11 +26,11 @@
                     <!--<p>{{ content['source'].name }}</p>-->
                     <p style="text-align:center;">
                         <span class="starRatings" onmouseleave="showRating();">
-                            <a id="rating-1" href="#" onmouseover="highlightStars(1);return false;" onclick="setRating(1);return false;">☆</a>
-                            <a id="rating-2" href="#" onmouseover="highlightStars(2);return false;" onclick="setRating(2);return false;">☆</a>
-                            <a id="rating-3" href="#" onmouseover="highlightStars(3);return false;" onclick="setRating(3);return false;">☆</a>
-                            <a id="rating-4" href="#" onmouseover="highlightStars(4);return false;" onclick="setRating(4);return false;">☆</a>
-                            <a id="rating-5" href="#" onmouseover="highlightStars(5);return false;" onclick="setRating(5);return false;">☆</a>
+                            <a id="rating-1" href="#" onmouseover="highlightStars(1);return false;" onclick="setRating(1, '{{ content['source'] }}');return false;">☆</a>
+                            <a id="rating-2" href="#" onmouseover="highlightStars(2);return false;" onclick="setRating(2, '{{ content['source'] }}');return false;">☆</a>
+                            <a id="rating-3" href="#" onmouseover="highlightStars(3);return false;" onclick="setRating(3, '{{ content['source'] }}');return false;">☆</a>
+                            <a id="rating-4" href="#" onmouseover="highlightStars(4);return false;" onclick="setRating(4, '{{ content['source'] }}');return false;">☆</a>
+                            <a id="rating-5" href="#" onmouseover="highlightStars(5);return false;" onclick="setRating(5, '{{ content['source'] }}');return false;">☆</a>
                         </span>
                     </p>
                 </div>
@@ -44,15 +48,15 @@
                     <!--<p>{{ content['source'].name }}</p>-->
                     <p style="text-align:center;">
                         <span class="starRatings" onmouseleave="showRating();">
-                            <a id="rating-1" href="#" onmouseover="highlightStars(1);return false;" onclick="setRating(1);return false;">☆</a>
-                            <a id="rating-2" href="#" onmouseover="highlightStars(2);return false;" onclick="setRating(2);return false;">☆</a>
-                            <a id="rating-3" href="#" onmouseover="highlightStars(3);return false;" onclick="setRating(3);return false;">☆</a>
-                            <a id="rating-4" href="#" onmouseover="highlightStars(4);return false;" onclick="setRating(4);return false;">☆</a>
-                            <a id="rating-5" href="#" onmouseover="highlightStars(5);return false;" onclick="setRating(5);return false;">☆</a>
+                            <a id="rating-1" href="#" onmouseover="highlightStars(1);return false;" onclick="setRating(1, '{{ content['source'] }}');return false;">☆</a>
+                            <a id="rating-2" href="#" onmouseover="highlightStars(2);return false;" onclick="setRating(2, '{{ content['source'] }}');return false;">☆</a>
+                            <a id="rating-3" href="#" onmouseover="highlightStars(3);return false;" onclick="setRating(3, '{{ content['source'] }}');return false;">☆</a>
+                            <a id="rating-4" href="#" onmouseover="highlightStars(4);return false;" onclick="setRating(4, '{{ content['source'] }}');return false;">☆</a>
+                            <a id="rating-5" href="#" onmouseover="highlightStars(5);return false;" onclick="setRating(5, '{{ content['source'] }}');return false;">☆</a>
                         </span>
                     </p>
                 </div>
-            <video style="margin: 0 auto;" autoplay loop controls width="99%" height="99%"
+            <video style="margin: 0 auto;" autoplay loop width="99%" height="99%"
                    src="{{ url_for('static', filename='images/' + content['source']) }}">
             </video>
         {% endif %}

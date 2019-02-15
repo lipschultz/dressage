@@ -37,7 +37,28 @@ function showRating() {
     highlightStars(rating);
 }
 
-function setRating(starIndex) {
+function setRating(starIndex, file_reference) {
     rating = starIndex;
     showRating();
+    $.ajax({
+        url: '/_save_rating',
+        data: {
+            rating: rating,
+            file_reference: file_reference
+        },
+        success: function(response) {
+            console.log(response);
+            elements = document.getElementsByClassName("starRatings")
+            for (var i=0; i < elements.length; i++) {
+                elements[i].style.color = 'rgba(243, 229, 171, 0.66)';
+            }
+        },
+        error: function(error) {
+            console.log(error);
+            elements = document.getElementsByClassName("starRatings")
+            for (var i=0; i < elements.length; i++) {
+                elements[i].style.color = 'rgba(139, 0, 0, 0.66)';
+            }
+        }
+    });
 }
