@@ -2,6 +2,7 @@ import random
 from pathlib import Path
 
 from flask import Blueprint, render_template, request, current_app, jsonify
+import numpy as np
 
 from dressage.db import get_db
 
@@ -15,17 +16,22 @@ VIDEO_EXTENSIONS = ('.mp4', '.mpeg4', '.mpeg', '.webm')
 def index():
     data = {'refresh-rate': 7 * 60}
 
-    image_directory = Path(current_app.config['SOURCE_DIRECTORY'])
-    images = [f for f in image_directory.rglob('*') if f.suffix.lower() in IMG_EXTENSIONS]
-    image = random.choice(images)
-    data.update({
-        'source': str(image.relative_to(image_directory)),
-        'type': 'img' if image.suffix.lower() in IMG_EXTENSIONS else 'video'
-    })
-
     db = get_db()
-    row = db.execute('SELECT rating FROM ratings WHERE file_reference = ?', (data['source'], )).fetchone()
-    data['rating'] = row['rating'] if row else 0
+    cursor = db.execute('SELECT file_reference, rating FROM ratings')
+    ratings_map = {r['file_reference']: r['rating'] for r in cursor}
+
+    image_directory = Path(current_app.config['SOURCE_DIRECTORY'])
+    images_ratings = [(f.relative_to(image_directory), 2**ratings_map.get(f, 3.5)) for f in image_directory.rglob('*') if f.suffix.lower() in IMG_EXTENSIONS]
+    images, ratings = zip(*images_ratings)
+    total_rating = sum(ratings)
+    ratings_distr = [r / total_rating for r in ratings]
+
+    image = np.random.choice(images, p=ratings_distr)
+    data.update({
+        'source': str(image),
+        'type': 'img' if image.suffix.lower() in IMG_EXTENSIONS else 'video',
+        'rating': ratings_map.get(image, 0)
+    })
 
     return render_template('slideshow.html', content=data)
 
