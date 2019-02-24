@@ -21,8 +21,8 @@ def index():
     ratings_map = {r['file_reference']: r['rating'] for r in cursor}
 
     image_directory = Path(current_app.config['SOURCE_DIRECTORY'])
-    images_ratings = [(f.relative_to(image_directory), 2**ratings_map.get(f, 3.5)) for f in image_directory.rglob('*') if f.suffix.lower() in IMG_EXTENSIONS]
-    images, ratings = zip(*images_ratings)
+    images = [f.relative_to(image_directory) for f in image_directory.rglob('*') if f.suffix.lower() in IMG_EXTENSIONS]
+    ratings = [2**ratings_map.get(str(f), 3.5) for f in images]
     total_rating = sum(ratings)
     ratings_distr = [r / total_rating for r in ratings]
 
@@ -30,7 +30,7 @@ def index():
     data.update({
         'source': str(image),
         'type': 'img' if image.suffix.lower() in IMG_EXTENSIONS else 'video',
-        'rating': ratings_map.get(image, 0)
+        'rating': ratings_map.get(str(image), 0)
     })
 
     return render_template('slideshow.html', content=data)
