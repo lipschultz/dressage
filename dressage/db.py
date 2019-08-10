@@ -40,3 +40,26 @@ def close_db(e=None):
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+
+
+def record_rating(file_reference, rating):
+    db = get_db()
+    try:
+        db.execute('INSERT INTO ratings (file_reference, rating) '
+                   'VALUES (?, ?) '
+                   'ON CONFLICT(file_reference) '
+                   'DO UPDATE SET rating=excluded.rating',
+                   (file_reference, rating)
+                   )
+    except sqlite3.OperationalError:
+        try:
+            db.execute('INSERT INTO ratings (file_reference, rating) '
+                       'VALUES (?, ?)',
+                       (file_reference, rating)
+                       )
+        except sqlite3.IntegrityError:
+            db.execute('UPDATE ratings SET rating=? WHERE file_reference=?',
+                       (rating, file_reference)
+                       )
+    db.commit()
+    return True

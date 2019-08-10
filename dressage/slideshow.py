@@ -1,15 +1,20 @@
-import random
+import sqlite3
 from pathlib import Path
 
-from flask import Blueprint, render_template, request, current_app, jsonify
 import numpy as np
+from flask import Blueprint, render_template, request, current_app, jsonify
 
-from dressage.db import get_db
+from dressage.db import get_db, record_rating
 
 bp = Blueprint('dressage', __name__)
 
 IMG_EXTENSIONS = ('.gif', '.png', '.jpg', '.jpeg', '.jpe', '.bmp')
 VIDEO_EXTENSIONS = ('.mp4', '.mpeg4', '.mpeg', '.webm')
+
+
+def filename_to_probability(filename, ratings_map):
+    rating = ratings_map.get(str(filename), 3.5)
+    return 0 if rating == 1 else 2**rating
 
 
 @bp.route('/')
@@ -22,7 +27,7 @@ def index():
 
     image_directory = Path(current_app.config['SOURCE_DIRECTORY'])
     images = [f.relative_to(image_directory) for f in image_directory.rglob('*') if f.suffix.lower() in IMG_EXTENSIONS]
-    ratings = [2**ratings_map.get(str(f), 3.5) for f in images]
+    ratings = [filename_to_probability(f, ratings_map) for f in images]
     total_rating = sum(ratings)
     ratings_distr = [r / total_rating for r in ratings]
 
@@ -40,14 +45,7 @@ def index():
 def save_rating():
     file_reference = request.args.get('file_reference')
     rating = request.args.get('rating')
-    print(f'saving: {file_reference}, {rating}')
+    print('saving: {file_reference}, {rating}'.format(file_reference=file_reference, rating=rating))
 
-    db = get_db()
-    db.execute('INSERT INTO ratings (file_reference, rating) '
-               'VALUES (?, ?) '
-               'ON CONFLICT(file_reference) '
-               'DO UPDATE SET rating=excluded.rating',
-               (file_reference, rating)
-               )
-    db.commit()
-    return jsonify(result=True)
+    result = record_rating(file_reference, rating)
+    return jsonify(result=result)
