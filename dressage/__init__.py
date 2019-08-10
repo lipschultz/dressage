@@ -9,7 +9,8 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         SOURCE_DIRECTORY=os.path.join(app.instance_path, '..', 'images'),
-        DATABASE=os.path.join(app.instance_path, 'dressage.sqlite')
+        DATABASE=os.path.join(app.instance_path, 'dressage.sqlite'),
+        FLAG_FILE=os.path.join(app.instance_path, '..', 'flag.log'),
         # SOURCE_DIRECTORY=os.path.join(app.instance_path, 'static', 'images')
     )
 

@@ -33,6 +33,9 @@
                             <a id="rating-5" href="#" onmouseover="highlightStars(5);return false;" onclick="setRating(5, '{{ content['source'] }}');return false;">☆</a>
                         </span>
                     </p>
+                    <p align="center">
+                        <a id='flag' href='#' style='height:1em;width:1.5em;border:2px solid rgba(255, 255, 255, 0.33);display:block;' onclick="flagPicture('{{ content['source'] }}');return false;"></a>
+                    </p>
                 </div>
             </div>
         {% else %}
@@ -54,6 +57,9 @@
                             <a id="rating-4" href="#" onmouseover="highlightStars(4);return false;" onclick="setRating(4, '{{ content['source'] }}');return false;">☆</a>
                             <a id="rating-5" href="#" onmouseover="highlightStars(5);return false;" onclick="setRating(5, '{{ content['source'] }}');return false;">☆</a>
                         </span>
+                    </p>
+                    <p align="center">
+                        <a id='flag' href='#' style='height:1em;width:1.5em;border:2px solid rgba(255, 255, 255, 0.33);display:block;' onclick="flagPicture('{{ content['source'] }}');return false;"></a>
                     </p>
                 </div>
             <video style="margin: 0 auto;" autoplay loop width="99%" height="99%"

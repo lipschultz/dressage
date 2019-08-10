@@ -62,3 +62,24 @@ function setRating(starIndex, file_reference) {
         }
     });
 }
+
+function flagPicture(file_reference) {
+    $.ajax({
+        url: '/_flag_picture',
+        data: {
+            file_reference: file_reference
+        },
+        success: function(response) {
+            console.log(response);
+            flag = document.getElementById("flag");
+            flag.style.backgroundColor = 'rgba(243, 229, 171, 0.66)';
+            flag.style.border = '1px solid rgba(243, 229, 171, 0.33)';
+        },
+        error: function(error) {
+            console.log(error);
+            flag = document.getElementById("flag");
+            flag.style.backgroundColor = 'rgba(139, 0, 0, 0.66)';
+            flag.style.border = '1px solid rgba(139, 0, 0, 0.33)';
+        }
+    });
+}

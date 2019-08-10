@@ -49,3 +49,11 @@ def save_rating():
 
     result = record_rating(file_reference, rating)
     return jsonify(result=result)
+
+
+@bp.route('/_flag_picture')
+def flag_picture():
+    file_reference = request.args.get('file_reference')
+    with open(current_app.config['FLAG_FILE'], 'a') as fp:
+        fp.write('{file_reference}\n'.format(file_reference=file_reference))
+    return jsonify(result=True)
