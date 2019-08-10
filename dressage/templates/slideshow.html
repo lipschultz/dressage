@@ -10,7 +10,7 @@
           SCRIPT_ROOT = {{ request.url_root|tojson|safe }};
         </script>
     </head>
-    <body style="background-color: black;" onload="rating={{ content['rating'] }}; showRating(); refreshSeconds = 7*60;">
+    <body style="background-color: black;" onload="rating={{ content['rating'] }}; showRating(); refreshSeconds = {{ content['refresh-rate'] }};">
         {% if content['type'] == 'img' %}
             <div class="imagebox" style="background-image: url({{ url_for('static', filename='images/' + content['source']) }});">
                 {% for message in get_flashed_messages() %}
