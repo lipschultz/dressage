@@ -51,15 +51,20 @@ def record_rating(file_reference, rating):
                    'DO UPDATE SET rating=excluded.rating',
                    (file_reference, rating)
                    )
-    except sqlite3.OperationalError:
+        current_app.logger.info('Successfully recorded rating for {file_reference}', file_reference=file_reference)
+    except sqlite3.OperationalError as op_err:
+        current_app.logger.warn('Encountered OperationalError while recording rating for {file_reference}: {err}', file_reference=file_reference, err=str(op_err))
         try:
             db.execute('INSERT INTO ratings (file_reference, rating) '
                        'VALUES (?, ?)',
                        (file_reference, rating)
                        )
-        except sqlite3.IntegrityError:
+            current_app.logger.info('Successfully recorded rating for {file_reference} after encountering OperationalError', file_reference=file_reference)
+        except sqlite3.IntegrityError as int_err:
+            current_app.logger.warn('Encountered IntegrityError while recording rating for {file_reference}: {err}', file_reference=file_reference, err=str(int_err))
             db.execute('UPDATE ratings SET rating=? WHERE file_reference=?',
                        (rating, file_reference)
                        )
+            current_app.logger.info('Successfully recorded rating for {file_reference} after encountering IntegrityError', file_reference=file_reference)
     db.commit()
     return True

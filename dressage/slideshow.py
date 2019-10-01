@@ -45,9 +45,10 @@ def index():
 def save_rating():
     file_reference = request.args.get('file_reference')
     rating = request.args.get('rating')
-    print('saving: {file_reference}, {rating}'.format(file_reference=file_reference, rating=rating))
+    current_app.logger.info('Rating received for {file_reference}: {rating}', file_reference=file_reference, rating=rating)
 
     result = record_rating(file_reference, rating)
+    current_app.logger.info('Rating received for {file_reference}: {rating}', file_reference=file_reference, rating=rating)
     return jsonify(result=result)
 
 
