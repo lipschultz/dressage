@@ -48,7 +48,7 @@ def save_rating():
     current_app.logger.info('Rating received for {file_reference}: {rating}', file_reference=file_reference, rating=rating)
 
     result = record_rating(file_reference, rating)
-    current_app.logger.info('Rating received for {file_reference}: {rating}', file_reference=file_reference, rating=rating)
+    current_app.logger.info('Result for rating {file_reference}={rating}: {result}', file_reference=file_reference, rating=rating, result=result)
     return jsonify(result=result)
 
 
