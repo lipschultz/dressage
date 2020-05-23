@@ -53,7 +53,7 @@ def record_rating(file_reference, rating):
                    )
         current_app.logger.info('Successfully recorded rating for {file_reference}', file_reference=file_reference)
     except sqlite3.OperationalError as op_err:
-        current_app.logger.warn('Encountered OperationalError while recording rating for {file_reference}: {err}', file_reference=file_reference, err=str(op_err))
+        current_app.logger.warn('Encountered OperationalError while recording rating for {file_reference}: {error_info}', file_reference=file_reference, error_info=str(op_err))
         try:
             db.execute('INSERT INTO ratings (file_reference, rating) '
                        'VALUES (?, ?)',
