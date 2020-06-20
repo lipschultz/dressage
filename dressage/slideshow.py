@@ -30,7 +30,7 @@ def index():
     total_rating = sum(ratings)
     ratings_distr = [r / total_rating for r in ratings]
 
-    image = random.choices(images, weights=ratings_distr)
+    image = random.choices(images, weights=ratings_distr)[0]
     data.update({
         'source': str(image),
         'type': 'img' if image.suffix.lower() in IMG_EXTENSIONS else 'video',
