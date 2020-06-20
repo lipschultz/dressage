@@ -1,7 +1,6 @@
-import sqlite3
+import random
 from pathlib import Path
 
-import numpy as np
 from flask import Blueprint, render_template, request, current_app, jsonify
 
 from dressage.db import get_db, record_rating
@@ -31,7 +30,7 @@ def index():
     total_rating = sum(ratings)
     ratings_distr = [r / total_rating for r in ratings]
 
-    image = np.random.choice(images, p=ratings_distr)
+    image = random.choices(images, weights=ratings_distr)
     data.update({
         'source': str(image),
         'type': 'img' if image.suffix.lower() in IMG_EXTENSIONS else 'video',
